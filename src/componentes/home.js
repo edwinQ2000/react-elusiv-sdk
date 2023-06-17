@@ -1,23 +1,27 @@
-import React from 'react'
+import React, { useState,useEffect} from 'react';
 import Navbar from './navbar';
+import {useFetch} from './useFetch';
 import {Button,Modal,ModalHeader,ModalBody,ModalFooter,Input,Label, FormGroup,Form} from 'reactstrap';
 
-class Home extends React.Component{
-  constructor(props) {
-    super(props);
-    this.state = {
-      modal: false
-    };
 
-    this.toggle = this.toggle.bind(this);
+const Home = () => {
+  const {data, loading} = useFetch("https://crud-giweb-default-rtdb.firebaseio.com/Concesionario.json");
+  const [modalIsOpen, setIsOpen] = useState(false);
+  console.log(data);
+  
+  function openModal() {
+    setIsOpen(true);
   }
 
-  toggle() {
-    this.setState({
-      modal: !this.state.modal
-    });
+  function closeModal() {
+    setIsOpen(false);
   }
-  render(){
+
+  const enviar = () =>{
+    console.log("hi");
+  }
+
+
   return (
     <div>
     <div class='cabecera'>
@@ -25,30 +29,35 @@ class Home extends React.Component{
       <br/>
       <p> <h1>Saldo </h1></p>
       <p>0</p>
-      <select name="coins">
-      <option>eth</option>
-      <option>sol</option>
+      {loading && <h1>cargando</h1>}
+      <select name="acronymCoin">
+        
+      <option>{data.Nissan.Nombre}</option>
+      <option>{data.Nissan.Modelo}</option>
       <option>bit</option>
       <option>udst</option>
     </select>
+    
     <br/>
     <br/>
     <br/>
-    <Button onClick={this.toggle}>Enviar money</Button>
+    <Button onClick={openModal}>Enviar money</Button>
     </div>
 
 
-    <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-          <ModalHeader toggle={this.toggle}>Envio de Cryptodivisas</ModalHeader>
+    <Modal isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Example Modal">
+          <ModalHeader >Envio de Cryptodivisas</ModalHeader>
           <ModalBody>
-          <Form>
+          <Form >
         <FormGroup>
           <Label for="account">Account</Label>
           <Input type="text" name="account" id="account" placeholder="0x...." />
           <Label for="monto">Monto</Label>
           <Input type="number" name="monto" id="monto" placeholder="#" />
           <Label for="divisa">Seleccionar Divisa</Label>
-          <Input type="select" name="divisa" id="divisa">
+          <Input type="select" name="acronymCoin" id="divisa">
             <option>eth</option>
             <option>sol</option>
             <option>bit</option>
@@ -58,14 +67,14 @@ class Home extends React.Component{
         </Form>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.toggle}>Enviar</Button>{' '}
-            <Button color="secondary" onClick={this.toggle}>Cancelar</Button>
+            <Button color="primary" type='submit' onClick={enviar}>Enviar</Button>
+            <Button color="secondary" onClick={closeModal}>Cancelar</Button>
           </ModalFooter>
         </Modal>
       <Navbar/>
     </div>
   )
 }
-}
+
 
 export default Home;
