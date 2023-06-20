@@ -1,48 +1,29 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import Navbar from './navbar';
+import UniTx from './uniTx';
+import { useFetch } from './useFetch';
 import { Table } from 'reactstrap';
 
 const Tx = () => {
-  return (  
-    <div>
-        <div class='cabecera'>
-        
-        <Table>
-        
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          </tbody>
-          </Table>
-          <Table>
-          
-          <tbody>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          </tbody>
-          
-          </Table>
-          <Table>
-          <tbody>
-          <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
-          </tr>
-        </tbody>
-      </Table>
+  const data = useFetch("https://crud-giweb-default-rtdb.firebaseio.com/Concesionario.json");
+  return (
+
+    <>
+      <div class='cabecera'>
+        {data ? (
+          <Fragment>
+
+            {data.map((data, key) => <p>{data.Nombre}</p>)}
+          </Fragment>
+        ) : (
+          <p>Loaging...</p>
+        )}
       </div>
-    <Navbar/>
-    </div>
+
+      <Navbar />
+
+    </>
+
   )
 }
 
